@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <clause name="table_def">
+        <g alias="table_def">
+            <o>
+                <g alias="schema_name">records</g>.
+            </o>
+            <g alias="table_name">
+                <s>
+                    <g>student</g>
+                    <g>staff</g>
+                </s>
+            </g>
+        </g>
+    </clause>
+    <clause name="field_def">
+        <g alias="field_def">
+            <o>
+                <ref>table_def</ref>.
+            </o>
+            <g alias="field_name">
+                <s>
+                    <g>name</g>
+                    <g>dob</g>
+                </s>
+            </g>
+        </g>
+    </clause>
+    <clause name="expr_def">
+        <g alias="expr_def">
+            <ref alias="field">field_def</ref>
+            <s alias="operator">
+                <g>
+                    <![CDATA[
+                    =
+                    ]]>
+                </g>
+                <g>
+                    <![CDATA[
+                    <
+                    ]]>
+                </g>
+                <g>
+                    <![CDATA[
+                    >
+                    ]]>
+                </g>
+                <g>
+                    <![CDATA[
+                    <=
+                    ]]>
+                </g>
+                <g>
+                    <![CDATA[
+                    >=
+                    ]]>
+                </g>
+            </s>
+            <in alias="value">
+                <![CDATA[
+                    .*
+                ]]>
+            </in>
+        </g>
+    </clause>
+    <clause name="sql" primary="true">
+    	select
+        <ref>field_def</ref>
+        from
+        <ref>table_def</ref>
+        <o alias="where_portion">
+            where
+            <ref>expr_def</ref>
+        </o>
+    </clause>
+<!--    <clause name="test" primary="true">
+        <g alias="x">
+            <o alias="y">
+                a
+            </o>
+            <g alias="z">
+                a
+            </g>
+        </g>
+    </clause>-->
+</root>

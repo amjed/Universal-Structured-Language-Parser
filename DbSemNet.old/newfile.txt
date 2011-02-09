@@ -1,0 +1,32 @@
+/* Column can be found in both TableA and TableB */
+isCommonColumn( TableA, TableB, Column ) :-
+					isFieldOf( TableA, Column, _ ),
+					isFieldOf( TableB, Column, _ ),
+					TableA\=TableB.
+
+/* Column is a primary key of TableA, but also found in TableB */
+isCommonKey( TableA, TableB, Column ) :-
+					isPrimaryKeyOf( TableA, Column, _ ),
+					isCommonColumn( TableA, TableB, Column ).
+
+/* Column is a primary key of TableA, but also found in TableB as a non-primary key */
+isForeignKey( TableA, TableB, Column ) :-
+					isCommonKey( TableA, TableB, Column ),
+					not(isPrimaryKeyOf( TableB, Column, _ )).
+
+/* Column is a primary key of TableA, but also found in TableB as a primary key */
+isSharePrimaryKey( TableA, TableB, Column ):-
+					isCommonKey( TableA, TableB, Column ),
+					isPrimaryKeyOf( TableB, Column, _ ).
+
+/* ColumnA and ColumnB are columns existing in TableA and TableB respectively but are both primary-keys of CrossTable */
+isCrossTable( CrossTable, TableA, ColumnA, TableB, ColumnB ) :-
+					isCommonKey( CrossTable, TableA, ColumnA),
+					isCommonKey( CrossTable, TableB, ColumnB),
+					TableA\=TableB,
+					ColumnA\=ColumnB.
+
+isNormalizedTable( Table, SuperTable, Column ) :-
+					isCommonKey( SuperTable, Table, Column),
+					not(isCrossTable( Table, SuperTable, Column, _ , _ ) ),
+					not(isCrossTable( SuperTable, Table, Column, _ , _ ) ).

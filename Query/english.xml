@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!--
+		TODO: ADD CLAUSES DESCRIBING WHAT THE USER'S INPUT E.G.:
+	<clause name="test" primary="true">
+		show me the <o>big</o> money
+	</clause>
+	-->
+	<clause name="test" primary="true">
+		<g alias="root">
+			show
+			<s>
+				<g alias="coworker">
+					co-workers of <var alias="X" />
+					<query>
+						isA( {X}, employee )
+					</query>
+				</g>
+				<g alias="age">
+					the age of <var alias="X" />
+					<query>
+						hasAge( {X}, _ )
+					</query>
+				</g>
+			</s>
+		</g>
+	</clause>
+</root>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : XmlParserTest.xml
+    Created on : September 2, 2010, 7:56 PM
+    Author     : Umran
+    Description:
+        Clause Parser Description XML.
+        This particular one is meant for testing the clause parser.
+-->
+
+<root>
+    <clause name="clause1">
+        a b c
+    </clause>
+    <clause name="clause2">
+        a b c d
+    </clause>
+    <clause name="clause2">
+        a b c e
+    </clause>
+</root>

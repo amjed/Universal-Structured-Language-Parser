@@ -1,0 +1,3 @@
+@Typed
+
+println args[0]

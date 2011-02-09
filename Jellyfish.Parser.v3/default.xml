@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <clause name="clause_x">
+	<g alias="x">
+	    <o>
+		<g alias="a">a</g>
+	    </o>
+	    <g alias="b">b</g>
+	</g>
+    </clause>
+    <clause name="test" primary="true">
+	<r max="3">
+	    <ref inline="false">clause_x</ref>
+	</r>
+    </clause>
+</root>

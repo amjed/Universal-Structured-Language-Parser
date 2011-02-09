@@ -1,0 +1,449 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/*
+ * SemNetEditorFrame.java
+ *
+ * Created on Dec 13, 2010, 1:18:48 AM
+ */
+
+package jellyfish.base.gui;
+
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import jellyfish.base.JellyfishBase;
+import jellyfish.common.Common;
+import jellyfish.triplestore.ReferenceResults;
+import jellyfish.triplestore.TripleStore;
+import jellyfish.triplestore.xml.XmlTripleStore;
+
+/**
+ *
+ * @author Xevia
+ */
+public class SemNetEditorFrame extends javax.swing.JPanel {
+
+	private static final String clearString =
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+			"<root>\n" +
+			"\t<languages>\n" +
+			"\t\t<language name=\"english\" tokenizerClass=\"jellyfish.tokenizer.english.EnglishTokenizerWithoutDashedWords\" clausesFile=\"english.xml\" />\n" +
+			"\t</languages>\n" +
+			"\t<relationships>\n" +
+			"\t\t<!-- DEFINE RELATIONSHIPS HERE -->\n" +
+			"\t</relationships>\n" +
+			"\t<entities>\n" +
+			"\t\t<!-- DEFINE ENTITIES HERE -->\n" +
+			"\t</entities>\n" +
+			"\t<triples>\n" +
+			"\t\t<!-- DEFINE TRIPLES HERE -->\n" +
+			"\t</triples>\n" +
+			"</root>\n";
+
+	private JFrame rootFrame;
+	private JellyfishBase jellyfishBase;
+	private String xmlString = "";
+	private boolean xmlTextIsDirty = false;
+	private File semNetFile;
+	private long lastFileModified;
+	private ReferenceResults results;
+	private int currentResult;
+
+    /** Creates new form SemNetEditorFrame */
+	public SemNetEditorFrame( JFrame rootFrame, File semNetFile ) throws Exception {
+		this.rootFrame = rootFrame;
+		this.semNetFile = semNetFile;
+		TripleStore tripleStore = new XmlTripleStore( semNetFile );
+		this.jellyfishBase = new JellyfishBase( tripleStore );
+        initComponents();
+
+		btnReloadXmlActionPerformed( null );
+	}
+
+	public JellyfishBase getJellyfishBase() {
+		return jellyfishBase;
+	}
+	
+	private String readClauseFile() {
+		InputStream inputStream = null;
+		try {
+			inputStream = new BufferedInputStream( new FileInputStream( semNetFile ) );
+			return Common.streamToString( inputStream );
+		} catch ( Exception ex ) {
+			throw new RuntimeException( "Exception while reading from clause file: " + semNetFile,
+										ex );
+		} finally {
+			if (inputStream!=null) {
+				try {
+					inputStream.close();
+				} catch ( IOException ex ) {
+				}
+			}
+			lastFileModified = semNetFile.lastModified();
+		}
+	}
+
+	private void writeToClauseFile(String text) {
+		PrintWriter printWriter = null;
+		try {
+			printWriter = new PrintWriter( semNetFile );
+			printWriter.write( text );
+		} catch ( Exception ex ) {
+			throw new RuntimeException( "Exception while writing to clause file: " + semNetFile,
+										ex );
+		} finally {
+			if ( printWriter != null ) {
+				try {
+					printWriter.close();
+				} catch ( Exception ex ) {
+				}
+			}
+			lastFileModified = semNetFile.lastModified();
+		}
+	}
+	
+
+	public boolean isXmlTextIsDirty() {
+		return xmlTextIsDirty;
+	}
+
+	final public void setXmlTextIsDirty( boolean xmlTextIsDirty ) {
+		if ( this.xmlTextIsDirty != xmlTextIsDirty ) {
+			System.out.println( "xml is dirty = "+xmlTextIsDirty );
+			this.firePropertyChange(
+					"xmlTextIsDirty",
+					this.xmlTextIsDirty,
+					this.xmlTextIsDirty = xmlTextIsDirty );
+		}
+	}
+
+	public String getXmlString() {
+		return xmlString;
+	}
+
+	final public void setXmlString( String xmlString ) {
+		if ( !this.xmlString.equals( xmlString ) ) {
+			this.firePropertyChange(
+					"xmlString",
+					this.xmlString,
+					this.xmlString = xmlString );
+			this.setXmlTextIsDirty( true );
+		}
+	}
+
+	private void refreshResultPane() {
+		if ( results!=null && ( currentResult >= 0 && currentResult < results.getResults().size() )) {
+			lblResultIndex.setText( (currentResult + 1) + "/" + results.getResults().size() );
+		} else {
+			lblResultIndex.setText( "<Empty>" );
+		}
+
+		btnPrevResult.setEnabled( results!=null && currentResult > 0 );
+		btnNextResult.setEnabled( results!=null && currentResult < results.getResults().size()-1 );
+
+		if (results!=null && currentResult>=0 && currentResult<results.getResults().size()) {
+			StringBuilder builder = new StringBuilder();
+
+			String[] variables = results.getVariables();
+			String[] values = results.getResults().get( currentResult );
+
+			for (int i=0; i<variables.length; ++i) {
+				if (builder.length()>0)
+					builder.append( "\n" );
+				builder.append( variables[i] );
+				builder.append( " = " );
+				if (i<values.length && values[i]!=null)
+					builder.append( values[i] );
+				else
+					builder.append( "null" );
+			}
+
+			txtOutput.setText( builder.toString() );
+		} else {
+			txtOutput.setText( "" );
+		}
+	}
+
+    /** This method is called from within the constructor to
+     * initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
+
+        javax.swing.JPanel jPanel2 = new javax.swing.JPanel();
+        javax.swing.JPanel jPanel3 = new javax.swing.JPanel();
+        btnReloadXml = new javax.swing.JButton();
+        btnSaveXml = new javax.swing.JButton();
+        btnClearXml = new javax.swing.JButton();
+        xmlContainer = new javax.swing.JPanel();
+        javax.swing.JScrollPane xmlScrollpane = new javax.swing.JScrollPane();
+        txtXml = new org.fife.ui.rsyntaxtextarea.RSyntaxTextArea();
+        javax.swing.JPanel bottomPanel = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        txtInput = new javax.swing.JTextField();
+        jPanel5 = new javax.swing.JPanel();
+        btnMatch = new javax.swing.JButton();
+        resultPanel = new javax.swing.JPanel();
+        javax.swing.JScrollPane outputScrollpane = new javax.swing.JScrollPane();
+        txtOutput = new javax.swing.JEditorPane();
+        jPanel1 = new javax.swing.JPanel();
+        btnPrevResult = new javax.swing.JButton();
+        lblResultIndex = new javax.swing.JLabel();
+        btnNextResult = new javax.swing.JButton();
+
+        setLayout(new java.awt.BorderLayout());
+
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        btnReloadXml.setText("Reload");
+        btnReloadXml.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReloadXmlActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnReloadXml);
+
+        btnSaveXml.setText("Save");
+        btnSaveXml.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveXmlActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnSaveXml);
+
+        btnClearXml.setText("Clear");
+        btnClearXml.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearXmlActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnClearXml);
+
+        jPanel2.add(jPanel3, java.awt.BorderLayout.PAGE_START);
+
+        xmlContainer.setBackground(new java.awt.Color(255, 153, 153));
+        xmlContainer.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 2, 2, 2));
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${xmlTextIsDirty}"), xmlContainer, org.jdesktop.beansbinding.BeanProperty.create("opaque"));
+        bindingGroup.addBinding(binding);
+
+        xmlContainer.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                xmlContainerPropertyChange(evt);
+            }
+        });
+        xmlContainer.setLayout(new java.awt.BorderLayout());
+
+        txtXml.setColumns(20);
+        txtXml.setRows(5);
+        txtXml.setSyntaxEditingStyle("text/xml");
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${xmlString}"), txtXml, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        xmlScrollpane.setViewportView(txtXml);
+
+        xmlContainer.add(xmlScrollpane, java.awt.BorderLayout.CENTER);
+
+        jPanel2.add(xmlContainer, java.awt.BorderLayout.CENTER);
+
+        add(jPanel2, java.awt.BorderLayout.CENTER);
+
+        bottomPanel.setLayout(new java.awt.BorderLayout());
+
+        jPanel4.setLayout(new java.awt.BorderLayout());
+        jPanel4.add(txtInput, java.awt.BorderLayout.CENTER);
+
+        btnMatch.setText("Match");
+        btnMatch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMatchActionPerformed(evt);
+            }
+        });
+        jPanel5.add(btnMatch);
+
+        jPanel4.add(jPanel5, java.awt.BorderLayout.EAST);
+
+        bottomPanel.add(jPanel4, java.awt.BorderLayout.PAGE_START);
+
+        resultPanel.setLayout(new java.awt.BorderLayout());
+
+        outputScrollpane.setPreferredSize(new java.awt.Dimension(100, 100));
+
+        txtOutput.setEditable(false);
+        outputScrollpane.setViewportView(txtOutput);
+
+        resultPanel.add(outputScrollpane, java.awt.BorderLayout.CENTER);
+
+        btnPrevResult.setText("Prev");
+        btnPrevResult.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrevResultActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnPrevResult);
+
+        lblResultIndex.setText("<empty>");
+        lblResultIndex.setMaximumSize(new java.awt.Dimension(50, 16));
+        lblResultIndex.setMinimumSize(new java.awt.Dimension(50, 16));
+        lblResultIndex.setPreferredSize(new java.awt.Dimension(50, 16));
+        jPanel1.add(lblResultIndex);
+
+        btnNextResult.setText("Next");
+        btnNextResult.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextResultActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNextResult);
+
+        resultPanel.add(jPanel1, java.awt.BorderLayout.PAGE_END);
+
+        bottomPanel.add(resultPanel, java.awt.BorderLayout.CENTER);
+
+        add(bottomPanel, java.awt.BorderLayout.PAGE_END);
+
+        bindingGroup.bind();
+    }// </editor-fold>//GEN-END:initComponents
+
+	private void btnReloadXmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReloadXmlActionPerformed
+
+		setXmlString( readClauseFile() );
+		setXmlTextIsDirty( false );
+		
+	}//GEN-LAST:event_btnReloadXmlActionPerformed
+
+	private void btnSaveXmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveXmlActionPerformed
+
+		writeToClauseFile( txtXml.getText() );
+		setXmlTextIsDirty( false );
+		
+	}//GEN-LAST:event_btnSaveXmlActionPerformed
+
+	private void btnClearXmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearXmlActionPerformed
+
+		txtXml.setSyntaxEditingStyle( "text/xml" );
+		txtXml.setText( clearString );
+		txtXml.setEditable( true );
+		setXmlTextIsDirty( true );
+		
+	}//GEN-LAST:event_btnClearXmlActionPerformed
+
+	private void xmlContainerPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_xmlContainerPropertyChange
+
+		if ( evt.getPropertyName().equals( "opaque" ) ) {
+			xmlContainer.repaint();
+		}
+		
+	}//GEN-LAST:event_xmlContainerPropertyChange
+
+	private void btnMatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMatchActionPerformed
+
+		if (xmlTextIsDirty) {
+			if (JOptionPane.showConfirmDialog(	resultPanel,
+					"The Semantic Network XML has been edited.\n" +
+					"Only saved changes will appear in the results.\n" +
+					"Would you like to save first?\n",
+					"Save XML?",
+					JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION) {
+				btnSaveXmlActionPerformed( null );
+			}
+		}
+
+		try {
+			String input = txtInput.getText();
+			if (input.isEmpty())
+				results = null;
+			else
+				results = jellyfishBase.getReferenceEngine().query( input );
+			currentResult = 0;
+			refreshResultPane();
+		} catch ( Exception ex ) {
+			ex.printStackTrace( System.out );
+			JOptionPane.showMessageDialog( rootFrame, Common.traceToString( ex ) );
+
+			currentResult = 0;
+			results = null;
+			refreshResultPane();
+		}
+		
+
+	}//GEN-LAST:event_btnMatchActionPerformed
+
+	private void btnNextResultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextResultActionPerformed
+
+		++currentResult;
+		refreshResultPane();
+
+	}//GEN-LAST:event_btnNextResultActionPerformed
+
+	private void btnPrevResultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevResultActionPerformed
+
+		--currentResult;
+		refreshResultPane();
+
+	}//GEN-LAST:event_btnPrevResultActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClearXml;
+    private javax.swing.JButton btnMatch;
+    private javax.swing.JButton btnNextResult;
+    private javax.swing.JButton btnPrevResult;
+    private javax.swing.JButton btnReloadXml;
+    private javax.swing.JButton btnSaveXml;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JLabel lblResultIndex;
+    private javax.swing.JPanel resultPanel;
+    private javax.swing.JTextField txtInput;
+    private javax.swing.JEditorPane txtOutput;
+    private org.fife.ui.rsyntaxtextarea.RSyntaxTextArea txtXml;
+    private javax.swing.JPanel xmlContainer;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    // End of variables declaration//GEN-END:variables
+
+	public static void main( String args[] ) {
+
+		try {
+			System.out.println( "Loading..." );
+			System.out.println( "===========" );
+
+			java.awt.EventQueue.invokeLater( new Runnable()
+			{
+
+				public void run() {
+					try {
+						JFrame frame = new JFrame();
+						frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+						SemNetEditorFrame editorFrame = new SemNetEditorFrame( frame,
+																			   new File( "semnet.xml" ) );
+						frame.setContentPane( editorFrame );
+						frame.pack();
+						frame.setVisible( true );
+					} catch ( Exception ex ) {
+						ex.printStackTrace( System.out );
+					}
+				}
+			} );
+		} catch ( Exception ex ) {
+			ex.printStackTrace( System.out );
+		}
+
+	}
+
+}

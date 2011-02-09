@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="JellyfishPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>jellyfish.triplestore.model.BaseEntity</class>
+    <class>jellyfish.triplestore.model.Entity</class>
+    <class>jellyfish.triplestore.model.EntityName</class>
+    <class>jellyfish.triplestore.model.FloatValue</class>
+    <class>jellyfish.triplestore.model.IntegerValue</class>
+    <class>jellyfish.triplestore.model.Language</class>
+    <class>jellyfish.triplestore.model.Relationship</class>
+    <class>jellyfish.triplestore.model.StringValue</class>
+    <class>jellyfish.triplestore.model.Triple</class>
+    <class>jellyfish.triplestore.model.Value</class>
+    <class>jellyfish.triplestore.editor.model.Connector</class>
+    <class>jellyfish.triplestore.editor.model.ConnectorPoint</class>
+    <class>jellyfish.triplestore.editor.model.EntityBox</class>
+    <shared-cache-mode>NONE</shared-cache-mode>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/jellyfish"/>
+      <property name="javax.persistence.jdbc.password" value="sa123"/>
+      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
+      <property name="javax.persistence.jdbc.user" value="sa"/>
+      <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+    </properties>
+  </persistence-unit>
+</persistence>

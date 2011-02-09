@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <clause name="rex">
+        <g alias="x">
+            <o>
+                <o>
+                    a
+                    .
+                </o>
+                b
+                .
+            </o>
+            c
+        </g>
+    </clause>
+    <clause name="test" primary="true">
+        <r max="2">
+            <ref>rex</ref>
+        </r>
+    </clause>
+</root>

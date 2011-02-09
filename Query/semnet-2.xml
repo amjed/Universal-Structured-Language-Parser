@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <languages>
+		<language name="english" tokenizerClass="jellyfish.tokenizer.english.EnglishTokenizerWithoutDashedWords" clausesFile="english.xml" />
+    </languages>
+    <relationships>
+		<relationship name="isA" symmetric="false" transitive="false"/>
+		<relationship name="worksWith" symmetric="true" transitive="true"/>
+		<relationship name="hasAge" symmetric="false" transitive="false"/>
+		<relationship name="livesIn" symmetric="false" transitive="false"/>
+    </relationships>
+    <entities>
+		<entity name="employee">
+		</entity>
+		<entity name="idris">
+			<names language="english">
+				<name>Idris</name>
+				<name>Idris Dave</name>
+				<name>Idris G Dave</name>
+			</names>
+		</entity>
+		<entity name="umran">
+			<names language="english">
+				<name>Umran</name>
+				<name>Umran Azziz</name>
+				<name>Umran Azziz Abdulla</name>
+			</names>
+		</entity>
+    </entities>
+    <triples>
+		<triple>
+			<sub>umran</sub>
+			<pred>isA</pred>
+			<obj>employee</obj>
+		</triple>
+		<triple>
+			<sub>idris</sub>
+			<pred>isA</pred>
+			<obj>employee</obj>
+		</triple>
+		<triple>
+			<sub>umran</sub>
+			<pred>worksWith</pred>
+			<obj>idris</obj>
+		</triple>
+		<triple>
+			<sub>umran</sub>
+			<pred>livesIn</pred>
+			<val>gombak</val>
+		</triple>
+		<triple>
+			<sub>idris</sub>
+			<pred>hasAge</pred>
+			<val>28</val>
+		</triple>
+    </triples>
+</root>
