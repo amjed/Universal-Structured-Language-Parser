@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-	<!--
-		TODO: ADD CLAUSES DESCRIBING WHAT THE USER'S INPUT E.G.:
 	<clause name="test" primary="true">
-		show me the <o>big</o> money
-	</clause>
-	-->
-	<clause name="other">
-		other
-	</clause>
-	<clause name="test" primary="true">
-		select
-		<s alias="field">
-			<g>all</g>
-			<g><ref>test</ref></g>
-		</s>
+		<g>
+			show all <var alias="X"/> who work with <var alias="Y"/>
+			<query>
+				<![CDATA[
+				worksWith( {X}, {Y} )
+				]]>
+			</query>
+		</g>
 	</clause>
 </root>

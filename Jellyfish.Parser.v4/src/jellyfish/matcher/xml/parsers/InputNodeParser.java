@@ -16,7 +16,7 @@ public class InputNodeParser extends jellyfish.xml.XmlNodeParser<InputClause, Co
     public InputClause parse( XmlNodeInfo<CompositeClause> nodeInfo ) {
         Element element = (Element)nodeInfo.getNode();
 
-	String value = element.getTextContent();
+        String value = element.getTextContent();
         if (value != null) {
             value = value.trim();
         }
